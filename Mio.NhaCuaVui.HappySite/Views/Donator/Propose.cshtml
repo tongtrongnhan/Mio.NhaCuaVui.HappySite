@@ -1,0 +1,500 @@
+﻿@model DonatorProposeViewModel
+
+@{
+    ViewData["Title"] = "Đề Cử Tài Trợ";
+}
+<style>
+    * {
+        margin: 0;
+        padding: 0
+    }
+
+    html {
+        height: 100%
+    }
+
+    #grad1 {
+        background-color: : #9C27B0;
+        background-image: linear-gradient(120deg, #FF4081, #81D4FA)
+    }
+
+    #form-donate {
+        text-align: center;
+        position: relative;
+        margin-top: 20px
+    }
+
+        #form-donate fieldset .form-card {
+            background: white;
+            border: 0 none;
+            border-radius: 0px;
+            box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+            padding: 20px 40px 30px 40px;
+            box-sizing: border-box;
+            width: 94%;
+            margin: 0 3% 20px 3%;
+            position: relative
+        }
+
+        #form-donate fieldset {
+            background: white;
+            border: 0 none;
+            border-radius: 0.5rem;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0;
+            padding-bottom: 20px;
+            position: relative
+        }
+
+            #form-donate fieldset:not(:first-of-type) {
+                display: none
+            }
+
+            #form-donate fieldset .form-card {
+                text-align: left;
+                color: #9E9E9E
+            }
+
+        #form-donate input,
+        #form-donate textarea {
+            padding: 0px 8px 4px 8px;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            border-radius: 0px;
+            margin-bottom: 25px;
+            margin-top: 2px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: montserrat;
+            color: #2C3E50;
+            font-size: 16px;
+            letter-spacing: 1px
+        }
+
+            #form-donate input:focus,
+            #form-donate textarea:focus {
+                -moz-box-shadow: none !important;
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border: none;
+                font-weight: bold;
+                border-bottom: 2px solid skyblue;
+                outline-width: 0
+            }
+
+        #form-donate .action-button {
+            width: 100px;
+            background: skyblue;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px
+        }
+
+            #form-donate .action-button:hover,
+            #form-donate .action-button:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue
+            }
+
+        #form-donate .action-button-previous {
+            width: 100px;
+            background: #616161;
+            font-weight: bold;
+            color: white;
+            border: 0 none;
+            border-radius: 0px;
+            cursor: pointer;
+            padding: 10px 5px;
+            margin: 10px 5px
+        }
+
+            #form-donate .action-button-previous:hover,
+            #form-donate .action-button-previous:focus {
+                box-shadow: 0 0 0 2px white, 0 0 0 3px #616161
+            }
+
+    select.list-dt {
+        border: none;
+        outline: 0;
+        border-bottom: 1px solid #ccc;
+        padding: 2px 5px 3px 5px;
+        margin: 2px
+    }
+
+        select.list-dt:focus {
+            border-bottom: 2px solid skyblue
+        }
+
+    .card {
+        z-index: 0;
+        border: none;
+        border-radius: 0.5rem;
+        position: relative
+    }
+
+    .fs-title {
+        font-size: 25px;
+        color: #2C3E50;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-align: left
+    }
+
+    #progressbar {
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: lightgrey
+    }
+
+        #progressbar .active {
+            color: #000000
+        }
+
+        #progressbar li {
+            list-style-type: none;
+            font-size: 12px;
+            width: 20%;
+            float: left;
+            position: relative
+        }
+
+        #progressbar #account:before {
+            font-family: FontAwesome;
+            content: "\f007"
+        }
+
+        #progressbar #personal:before {
+            font-family: FontAwesome;
+            content: "\f007"
+        }
+
+        #progressbar #address:before {
+            font-family: FontAwesome;
+            content: "\f007"
+        }
+
+        #progressbar #address:before {
+            font-family: FontAwesome;
+            content: "\f007"
+        }
+
+        #progressbar #payment:before {
+            font-family: FontAwesome;
+            content: "\f09d"
+        }
+
+        #progressbar #confirm:before {
+            font-family: FontAwesome;
+            content: "\f00c"
+        }
+
+        #progressbar li:before {
+            width: 50px;
+            height: 50px;
+            line-height: 45px;
+            display: block;
+            font-size: 18px;
+            color: #ffffff;
+            background: lightgray;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            padding: 2px
+        }
+
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: lightgray;
+            position: absolute;
+            left: 0;
+            top: 25px;
+            z-index: -1
+        }
+
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: skyblue
+        }
+
+    .radio-group {
+        position: relative;
+        margin-bottom: 25px
+    }
+
+    .radio {
+        display: inline-block;
+        width: 100%;
+        height: 26px;
+        border-radius: 0;
+        background: #87ceeb;
+        box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+        box-sizing: border-box;
+        cursor: pointer;
+        margin: 8px 2px;
+        text-align: center;
+        color: #6e6e6e;
+    }
+
+        .radio:hover {
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+            color: red;
+        }
+
+        .radio.selected {
+            box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.1);
+            color: red;
+        }
+
+    .fit-image {
+        width: 100%;
+        object-fit: cover
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-11 col-sm-9 col-md-7 col-lg-6 text-center p-0 mt-3 mb-2">
+        <div class="card px-0 pt-4 pb-0 mt-3 mb-3">
+            <h2><strong>Cảm ơn bạn đã đề cử</strong></h2>
+            <p>Sau khi đăng ký, chúng tôi sẽ gọi cho bạn để xác nhận thông tin</p>
+            <p>Vui lòng mất thời gian một xíu để điền form sau bạn nhé!</p>
+
+            <div class="row">
+                <div class="col-md-12 mx-0">
+                    <form id="form-donate" asp-action="CreatePropose">
+                        <!-- progressbar -->
+                        <ul id="progressbar">
+                            <li class="active" id="personal"><strong>Thông tin</strong></li>
+                            <li id="account"><strong>Vật phẩm</strong></li>
+                            <li id="payment"><strong>Số lượng</strong></li>
+                            <li id="address"><strong>Liên lạc</strong></li>
+                            <li id="confirm"><strong>Hoàn thành</strong></li>
+                        </ul> <!-- fieldsets -->
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title">Thông tin người đóng góp</h2>
+                                <label class="pay">Bạn là? (vui lòng chọn 1 trong danh sách bên dưới)</label>
+                                <div class="radio-group">
+                                    @foreach (var type in Model.AllDonatorOrganizationType)
+                                    {
+                                        <div class='radio' data-input-name="DonatorOrganizationTypeId" data-value="@type.DonatorOrganizationTypeId"><span>@type.Name</span></div>
+
+                                    }
+
+                                </div>
+                                <input type="hidden" required name="DonatorOrganizationTypeId" />
+                                <input type="text" required asp-for="ProposetorName" placeholder="Tên của bạn" />
+                                <input type="text" required asp-for="ProposetorPhone" placeholder="Số điện thoại" />
+                                <input type="text" asp-for="OrganizationName" placeholder="Tên tổ chức (nếu có)" />
+
+                            </div>
+                            <input type="button" name="next" class="next action-button" value="Tiếp theo" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title">Danh sách vật phẩm bạn muốn chia sẻ</h2>
+                                <label class="pay">Vui lòng click chọn theo danh sách bên dưới!</label>
+                                @foreach (var need in Model.AllNeed)
+                                {
+                                    <h3>@need.Name</h3>
+                                    @foreach (var category in need.Categories)
+                                    {
+                                        <div class="row">
+                                            <input name="CategoryIds" value="@category.CategoryId" data-name="@category.Name" data-unit="@category.Unit" class="form-check-input" type="checkbox" id="Cate-@category.CategoryId">
+                                            <label class="form-check-label" for="Cate-@category.CategoryId">@category.Name</label>
+                                        </div>
+
+                                    }
+                                }
+
+                            </div>
+                            <input type="button" name="previous" class="previous action-button-previous" value="Trở về" />
+                            <input type="button" name="next" class="next action-button" id="next-for-quantity" value="Tiếp theo" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title">Vui lòng nhập số lượng bạn đang cần chia sẻ</h2>
+                                <label class="pay">Nếu bạn không biết chính xác số lượng thì vui lòng bỏ qua và bấm nút tiếp tục nha!</label>
+                                <div class="row" id="sample-quantity">
+                                    <div class="col-4">
+                                        <input type="hidden" name="data-id" value="data-id-value" />
+                                        <label class="pay">data-item</label>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" name="data-name" placeholder="Số lượng" />
+                                    </div>
+                                    <div class="col-2">
+                                        <label class="pay">data-unit</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="button" name="previous" class="previous action-button-previous" value="Previous" /> <input type="button" name="make_payment" class="next action-button" value="Confirm" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title">Bước cuối cùng rồi bạn tôi ơi!</h2>
+                                <label class="pay">Vui lòng nhập địa chỉ tổ chức/ cá nhân của bạn. Nếu bạn không phiền có thể nhập email để chúng tôi cập nhật kết quả bạn nhé!</label>
+                                <div class="row">
+
+                                    <div class="col-12">
+                                        <label class="pay">Email</label>
+                                        <input type="email" asp-for="ProposetorEmail" placeholder="" />
+
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="pay">Chọn Tỉnh/ Thành Phố</label>
+
+                                        <select asp-items="@(new SelectList(Model.Cities, "CityId", "Name"))"
+                                                style="width: 100% !important" type="text" id="city" class="select2" placeholder="Thành phố">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="pay">Chọn Quận/ Huyện</label>
+                                        <select style="width: 100% !important" type="text" id="district" class="select2" placeholder="Thành phố">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="pay">Chọn Phường Xã</label>
+                                        <select required asp-for="WardId" style="width: 100% !important" type="text" id="ward" class="select2" placeholder="Thành phố">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="pay">Số nhà, Đường</label>
+                                        <input type="text" asp-for="Street" placeholder="" />
+
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="pay">Vài lời nhắn nhủ:</label>
+                                        <textarea asp-for="Note"></textarea>
+
+                                    </div>
+
+                                    <label class="pay">Bạn có thể gửi hàng hoặc chuyển hàng tới địa điểm tập kết không?</label>
+                                    <div class="radio-group">
+                                        <div class='radio' data-input-name="HadTransportation" data-value="true"><span>Có, tôi có đặt xe hoặc di chuyển</span></div>
+                                        <div class='radio' data-input-name="HadTransportation" data-value="false"><span>Không, tôi không có phương tiện</span></div>
+                                    </div>
+                                    <input type="hidden" value="" asp-for="HadTransportation"/>
+
+                                </div>
+                            </div>
+                            <input type="button" name="previous" class="previous action-button-previous" value="Trở về" /> 
+                            <input type="button" name="make_payment" class="next action-button submit" value="Hoàn Thành" />
+                        </fieldset>
+                        <fieldset>
+                            <div class="form-card">
+                                <h2 class="fs-title text-center">Xong rồi !</h2> <br><br>
+                                <div class="row justify-content-center">
+                                    <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
+                                </div> <br><br>
+                                <div class="row justify-content-center">
+                                    <div class="col-7 text-center">
+                                        <h5>Cảm ơn bạn đã chia sẻ thông tin của mình, tụi mình sẽ gọi lại bạn sớm để xác nhận thông tin! Mọi thắc mắc bạn có thể liên hệ hotline: 0937002776!</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script src="~/js/form-donator.js"></script>
+    <script>
+        $("input#next-for-quantity").click(function () {
+            var data = [];
+            var index = 0;
+            $("input:checked[name='CategoryIds']").each(function () {
+                var input = {};
+                input.Name = $(this).attr("data-name");
+                input.Id = $(this).val();
+                input.Unit = $(this).attr("data-unit");
+                data[index] = input;
+                console.log(input);
+                index++;
+            });
+
+            var html = $("#sample-quantity").html();
+
+            var fullHtml = "";
+
+            for (index = 0; index < data.length; index++)
+            {
+                var nameOfInput = "DonationCategoryQuantities";
+
+                var nameOfId = nameOfInput + "[" + index + "].CategoryId";
+                var nameOfQuantity = nameOfInput + "[" + index + "].Quantity";
+                var dataItem = data[index].Name;
+                var dataUnit = data[index].Unit;
+
+                fullHtml = fullHtml + html.replace("data-id", nameOfId)
+                    .replace("data-id-value", data[index].Id)
+                    .replace("data-item", dataItem)
+                    .replace("data-name", nameOfQuantity)
+                    .replace("data-unit", dataUnit);
+
+
+            }
+
+            $("#sample-quantity").html(fullHtml);
+
+        });
+
+
+
+        $(document).ready(function () {
+            $("#city").select2();
+
+            $("#district").select2({
+                ajax: {
+                    url: '/Home/GetDistrict',
+                    data: function (params) {
+                        return {
+                            CityId: $("#city").val()// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                }
+            });
+
+
+            $("#ward").select2({
+                ajax: {
+                    url: '/Home/GetWard',
+                    data: function (params) {
+                        return {
+                            DistrictId: $("#district").val()// search term
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    },
+                }
+            });
+
+        });
+
+    </script>
+
+
+
+}

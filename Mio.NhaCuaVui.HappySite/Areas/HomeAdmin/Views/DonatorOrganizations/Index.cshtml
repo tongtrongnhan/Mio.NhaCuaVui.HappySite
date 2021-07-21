@@ -1,0 +1,97 @@
+﻿@model IEnumerable<Mio.NhaCuaVui.HappySite.Models.DonatorOrganization>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Thông tin
+            </th>
+            <th>
+                Nhu cầu
+            </th>
+
+
+            <th>
+                Chi tiết
+            </th>
+
+            <th>
+                Ghi chú
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <p>Người đề cử: <a href="tel:@item.ProposetorPhone">@item.ProposetorName  - @item.ProposetorPhone</a></p>
+                    <p>Người của tổ chức: <a href="tel:@item.ContactPhone">@item.ContactName  - @item.ContactPhone</a></p>
+                    <p>Địa chỉ: @item.GetAddress()</p>
+                    @if (item.IsValidated == null)
+                    {
+                        <a class="btn btn-outline-dark" href="#">Chưa xác định</a>
+                    }
+                    else
+                    {
+                        if (item.IsValidated == true)
+                        {
+                            <a class="btn btn-success" href="#">Đã duyệt</a>
+                            <p>Duyệt bởi: <strong>@item.ValidatedUser.Name</strong></p>
+                            <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger" href="#">Hỏng được duyệt</a>
+                            <p>Bởi: <strong>@item.ValidatedUser.Name</strong></p>
+                            <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
+                            <p>@item.NotValidateMessage</p>
+
+                        }
+                    }
+                </td>
+                <td>
+                    @foreach (var cate in item.DonationCategoryQuantities)
+                    {
+                        <p><strong>@cate.Category.Name: </strong> @cate.Quantity (@cate.Category.Unit)</p>
+                    }
+                </td>
+
+
+                <td>
+                    <p><strong>@item.DonatorOrganizationType.Name</strong></p>
+                    <p>Tên tổ chức: @item.OrganizationName</p>
+                    <a class="btn btn-outline-primary" href="#">@item.GetTranspotationInformation()</a>
+
+                </td>
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DonatorOrganizationId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DonatorOrganizationId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DonatorOrganizationId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
