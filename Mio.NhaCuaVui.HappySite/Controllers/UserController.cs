@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Mio.NhaCuaVui.HappySite.ExtensionMethod;
 using Mio.NhaCuaVui.HappySite.Models;
@@ -41,6 +42,10 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             };
 
             HttpContext.Session.SetCurrentAuthentication(authenModel);
+
+            var lastRequestURL = HttpContext.Session.GetString("LastRequestURL");
+
+            if (string.IsNullOrEmpty(lastRequestURL) == false) return Redirect(lastRequestURL);
 
             return Redirect("/HomeAdmin/HomeAdmin");
         }

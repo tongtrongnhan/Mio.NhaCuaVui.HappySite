@@ -25,7 +25,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
         // GET: UserAdmin/UserAdmin
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.Include(x => x.UserUserRoles).ThenInclude(x => x.UserRole).ToListAsync());
+            return View(await _context.Users.Include(x => x.UserUserRoles).ThenInclude(x => x.UserRole).Include(x => x.MyDonatorOrganization).ToListAsync());
         }
 
         // GET: UserAdmin/UserAdmin/Details/5
@@ -50,6 +50,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
         public IActionResult Create()
         {
             ViewBag.AllRoles = _context.UserRoles.ToList();
+            ViewBag.AllDonator = _context.DonatorOrganizations.Where(x => x.IsValidated == true).ToList();
 
             return View();
         }
@@ -76,6 +77,9 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.AllDonator = _context.DonatorOrganizations.Where(x => x.IsValidated == true).ToList();
+
             return View(user);
         }
 
@@ -87,11 +91,16 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
                 return NotFound();
             }
 
-            var user = _context.Users.Include(x => x.UserUserRoles).ThenInclude(x => x.UserRole).FirstOrDefault(x => x.UserId == id);
+            var user = _context.Users
+                                .Include(x => x.UserUserRoles).ThenInclude(x => x.UserRole)
+                                .Include(x => x.MyDonatorOrganization)
+                                .FirstOrDefault(x => x.UserId == id);
             if (user == null)
             {
                 return NotFound();
             }
+
+            ViewBag.AllDonator = _context.DonatorOrganizations.Where(x => x.IsValidated == true).ToList();
 
             ViewBag.AllRoles = _context.UserRoles.ToList();
 
@@ -110,15 +119,14 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
+            try
                 {
-                    var userInDb = _context.Users.Find(user.UserId);
+                    var userInDb = _context.Users.Include(x => x.UserUserRoles).First(x => x.UserId == user.UserId);
                     userInDb.IsActive = user.IsActive;
                     userInDb.Name = user.Name;
                     userInDb.Email = user.Email;
                     userInDb.Phone = user.Phone;
+                userInDb.MyDonatorOrganizationId = user.MyDonatorOrganizationId;
                     userInDb.UserUserRoles.Clear();
                     if (userRoleIds != null || userRoleIds.Any())
                     {
@@ -130,7 +138,6 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
                     }
 
 
-                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -145,7 +152,11 @@ namespace Mio.NhaCuaVui.HappySite.Areas.UserAdmin.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            
+            ViewBag.AllRoles = _context.UserRoles.ToList();
+
+            ViewBag.AllDonator = _context.DonatorOrganizations.Where(x => x.IsValidated == true).ToList();
+
             return View(user);
         }
 

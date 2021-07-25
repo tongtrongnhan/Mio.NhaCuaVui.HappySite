@@ -16,6 +16,21 @@ namespace Mio.NhaCuaVui.HappySite.ExtensionMethod
             session.SetString(key, JsonConvert.SerializeObject(value));
         }
 
+        public static bool HadRoles(this ISession session, params string[] roles)
+        {
+            var user = session.GetCurrentAuthentication();
+            if (user == null) return false;
+
+            if(user.UserRoles.Any(x => roles.Any(r => r == x)))
+            {
+                return true;
+            }
+
+            return false;
+
+
+        }
+
         public static AuthenticationModel GetCurrentAuthentication(this ISession session)
         {
             return session.GetObjectFromJson<AuthenticationModel>(AuthenticationName);

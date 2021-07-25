@@ -19,7 +19,7 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-           
+
             <div class="form-group">
                 <label asp-for="UserGuid" class="control-label"></label>
                 <input asp-for="UserGuid" class="form-control" />
@@ -38,7 +38,7 @@
 
 
             <div class="form-group">
-                <label  class="control-label">Roles</label>
+                <label class="control-label">Roles</label>
                 <select id="userRoleIds" class="select2" multiple style="width: 100%" name="userRoleIds">
                     @foreach (var role in ViewBag.AllRoles as List<UserRole>)
                     {
@@ -52,6 +52,15 @@
 
                         }
                     }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Tổ chức</label>
+                <select asp-items='new SelectList(ViewBag.AllDonator, "DonatorOrganizationId","OrganizationNameDisplay", Model.MyDonatorOrganizationId)'
+                        id="my-donation-organization" class="select2" style="width: 100%" name="MyDonatorOrganizationId">
+                    <option value="">-- please select --</option>
+
                 </select>
             </div>
             <div class="form-group form-check">

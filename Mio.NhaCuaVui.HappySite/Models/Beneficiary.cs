@@ -63,6 +63,15 @@ namespace Mio.NhaCuaVui.HappySite.Models
             return ProposetorName;
         }
 
+        [NotMapped]
+        public string OrganizationDisplayName
+        {
+            get
+            {
+                return OrganizationDisplay();
+            }
+        }
+
         public string GetAddress()
         {
             if (Ward == null) return "Không rõ";

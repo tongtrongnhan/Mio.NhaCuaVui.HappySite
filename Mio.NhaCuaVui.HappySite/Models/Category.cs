@@ -23,6 +23,9 @@ namespace Mio.NhaCuaVui.HappySite.Models
         public List<DonationCategoryQuantity> DonationCategoryQuantities { get; set; }
         public List<BenificaryCategoryQuantity> BenificaryCategoryQuantities { get; set; }
 
+        public List<DeliveryCategory> DeliveryCategories { get; set; }
+
+
 
     }
 }

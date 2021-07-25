@@ -1,0 +1,94 @@
+﻿@model DonatorOrganization
+@{
+    ViewData["Title"] = "AddNewItem";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Cộng thêm vật phẩm cho: @Model.OrganizationDisplay()</h2>
+
+<div class="row">
+    <h4>Vui lòng chọn vật phẩm trước, sau đó cuộn xuống bên dưới để điền số lượng</h4>
+    <input type="hidden" value="0" id="current-index" />
+
+    @foreach (var need in ViewBag.Needs as List<Need>)
+    {
+        <div class="col-md-12">
+            <h3>@need.Name</h3>
+
+            @foreach (var category in need.Categories)
+            {
+                <div class="col-md-4">
+                    <input name="CategoryIds" value="@category.CategoryId" data-name="@category.Name" data-unit="@category.Unit" class="form-check-input" type="checkbox" id="Cate-@category.CategoryId">
+                    <label class="form-check-label" for="Cate-@category.CategoryId">@category.Name</label>
+                </div>
+
+            }
+        </div>
+
+    }
+</div>
+<hr />
+<h4>Vui lòng cập nhật số lượng vào danh sách sau: </h4>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddNewItem" method="post">
+            <input type="hidden" asp-for="DonatorOrganizationId" />
+            <div class="row" id="item-quantity">
+
+            </div>
+            <div class="row">
+                <a asp-action="Index" class="btn">Trở về</a>
+                <input type="submit" class="btn btn-success" value="Lưu" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $("input[name='CategoryIds']").change(function () {
+            var checkInput = $(this);
+            var isChecked = checkInput.is(":checked");
+            // get cate-id
+            var id = checkInput.val();
+
+            if (isChecked) {
+                // get current index
+                var currentIndex = $("#current-index").val();
+                var nextIndex = parseInt(currentIndex) + 1;
+
+                // + 1 for index
+                $("#current-index").val(nextIndex);
+
+
+                $.ajax({
+                    url: "/HomeAdmin/HomeAdmin/GetHTMLCategory",
+                    type: "post",
+                    data: {
+                        index: currentIndex,
+                        categoryId: id
+                    },
+                    success: function (res) {
+                        if (res.isSuccess) {
+                            $("#item-quantity").append(res.html);
+                        } else {
+                            alert("Lỗi khi tải dữ liệu");
+                        }
+
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra, vui lòng thử lại')
+                    }
+                });
+            }
+            else {
+                $("div[data-category-id='" + id + "']").remove();
+            }
+        });
+
+    </script>
+}
+
+

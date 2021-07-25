@@ -20,16 +20,35 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="UserAdmin" asp-controller="UserAdmin" asp-action="Index">Người dùng</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="Beneficiaries" asp-action="Index">Cần nhận</a>
-                        </li>
+                        @if (Context.Session.HadRoles("Admin", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="UserAdmin" asp-controller="UserAdmin" asp-action="Index">Người dùng</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="DonatorOrganizations" asp-action="Index">Cần cho</a>
-                        </li>
+                        }
+                        @if (Context.Session.HadRoles("Admin", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="Beneficiaries" asp-action="Index">Cần nhận</a>
+                            </li>
+                        }
+
+                        @if (Context.Session.HadRoles("Admin", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="DonatorOrganizations" asp-action="Index">Cần cho</a>
+                            </li>
+                        }
+                        @if (Context.Session.HadRoles("Donator", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="MyDonatorOrganization" asp-action="Index">Tổ chức của tôi</a>
+                            </li>
+
+                        }
+
+
                     </ul>
                 </div>
             </div>

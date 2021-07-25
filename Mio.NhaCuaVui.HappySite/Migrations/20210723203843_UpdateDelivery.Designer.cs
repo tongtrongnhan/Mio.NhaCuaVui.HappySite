@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mio.NhaCuaVui.HappySite.Models;
 
 namespace Mio.NhaCuaVui.HappySite.Migrations
 {
     [DbContext(typeof(ZDbContext))]
-    partial class ZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210723203843_UpdateDelivery")]
+    partial class UpdateDelivery
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,29 +194,14 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeliveredAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DonatorOrganizationId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDelivery")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsValidated")
-                        .HasColumnType("bit");
-
                     b.Property<int>("UserCreateId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("ValidatedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ValidateddAt")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("DeliveryId");
 
@@ -223,8 +210,6 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                     b.HasIndex("DonatorOrganizationId");
 
                     b.HasIndex("UserCreateId");
-
-                    b.HasIndex("ValidatedByUserId");
 
                     b.ToTable("Deliveries");
                 });
@@ -570,17 +555,11 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Mio.NhaCuaVui.HappySite.Models.User", "ValidatedByUser")
-                        .WithMany()
-                        .HasForeignKey("ValidatedByUserId");
-
                     b.Navigation("Beneficiary");
 
                     b.Navigation("DonatorOrganization");
 
                     b.Navigation("UserCreate");
-
-                    b.Navigation("ValidatedByUser");
                 });
 
             modelBuilder.Entity("Mio.NhaCuaVui.HappySite.Models.DeliveryCategory", b =>

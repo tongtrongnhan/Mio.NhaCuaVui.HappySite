@@ -34,7 +34,7 @@ namespace Mio.NhaCuaVui.HappySite.Authentication
 
             if (currentAuthentication == null)
             {
-                //context.Session.SetString(TextConstant.LastRequestURL, request.GetDisplayUrl());
+                context.Session.SetString("LastRequestURL", request.GetDisplayUrl());
                 filterContext.Result = new RedirectResult("/user/login");
                 return;
             }
@@ -48,6 +48,7 @@ namespace Mio.NhaCuaVui.HappySite.Authentication
             // chỉ require login
             if(_userRoles == null || _userRoles.Any() == false)
             {
+                context.Session.SetString("LastRequestURL", request.GetDisplayUrl());
                 return;
             }    
 

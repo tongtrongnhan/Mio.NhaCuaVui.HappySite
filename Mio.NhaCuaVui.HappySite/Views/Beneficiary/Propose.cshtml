@@ -290,7 +290,7 @@
                                 <input type="text" required asp-for="ProposetorName" placeholder="Tên của bạn" />
                                 <input type="text" required asp-for="ProposetorPhone" placeholder="Số điện thoại" />
                                 <input type="number" required asp-for="NumberOfPeople" placeholder="Số người cần hỗ trợ" />
-                                <input type="text" asp-for="OrganizationName" placeholder="Tên tổ chức (nếu có)" />
+                                <input type="text" asp-for="OrganizationName" placeholder="Nơi cần nhận (tên tổ chức, cá nhân)" />
 
                             </div>
                             <input type="button" name="next" class="next action-button" value="Tiếp theo" />
@@ -338,7 +338,7 @@
                         <fieldset>
                             <div class="form-card">
                                 <h2 class="fs-title">Bước cuối cùng rồi bạn tôi ơi!</h2>
-                                <label class="pay">Vui lòng nhập địa chỉ tổ chức/ cá nhân của bạn. Nếu bạn không phiền có thể nhập email để chúng tôi cập nhật kết quả bạn nhé!</label>
+                                <label class="pay">Vui lòng nhập địa chỉ tổ chức/ cá nhân cần được giúp đỡ. Nếu bạn không phiền có thể nhập email để chúng tôi cập nhật kết quả bạn nhé!</label>
                                 <div class="row">
 
                                     <div class="col-12">
@@ -372,8 +372,8 @@
 
                                     </div>
                                     <div class="col-12">
-                                        <label class="pay">Vài lời nhắn nhủ:</label>
-                                        <textarea asp-for="Note"></textarea>
+                                        <label class="pay" style="color: red">Vui lòng nói lên tình trạng hiện tại của người cần giúp:</label>
+                                        <textarea required asp-for="Note"></textarea>
 
                                     </div>
 

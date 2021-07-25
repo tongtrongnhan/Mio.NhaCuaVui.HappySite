@@ -14,16 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                Thông tin
             </th>
           
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-
+           
             <th>
                Quyền
             </th>
@@ -37,15 +31,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                <p>Email: @item.Email</p>
+                <p>Tên: @item.Name</p>
+                <p>Điện thoại: @item.Phone</p>
+                <p><strong>Tổ chức: @item.GetMyOrganizationName()</strong></p>
+
             </td>
-          
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
+         
             <td>
                 @foreach(var role in item.UserUserRoles.Select(x => x.UserRole).Distinct().ToList())
                 {

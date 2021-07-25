@@ -23,7 +23,7 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-        
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -43,6 +43,17 @@
                     {
                         <option value="@role.UserRoleId">@role.Name</option>
                     }
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">Tổ chức</label>
+                <select asp-items='new SelectList(ViewBag.AllDonator,"DonatorOrganizationId","OrganizationNameDisplay")'
+                        id="my-donation-organization" class="select2" style="width: 100%" name="MyDonatorOrganizationId">
+
+                    <option value="">-- please select --</option>
+
                 </select>
             </div>
             <div class="form-group form-check">
@@ -65,5 +76,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 <script>
     $("#userRoleIds").select2();
+    $("#my-donation-organization").select2();
+
 </script>
 }

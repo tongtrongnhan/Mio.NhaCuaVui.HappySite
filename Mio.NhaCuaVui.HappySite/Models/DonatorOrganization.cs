@@ -61,6 +61,15 @@ namespace Mio.NhaCuaVui.HappySite.Models
             return ProposetorName;
         }
 
+        [NotMapped]
+        public string OrganizationNameDisplay
+        {
+            get
+            {
+                return OrganizationDisplay();
+            }
+        }
+
 
         public string GetAddress()
         {

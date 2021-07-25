@@ -30,6 +30,9 @@ namespace Mio.NhaCuaVui.HappySite.Models
             builder
              .ApplyConfiguration(new UserUserRoleConfiguration());
 
+            builder
+            .ApplyConfiguration(new DeliveryCategoryQuatityConfig());
+
         }
 
         public DbSet<Category> Categories { get; set; }
@@ -51,6 +54,10 @@ namespace Mio.NhaCuaVui.HappySite.Models
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<UserUserRole> UserUserRole { get; set; }
+
+
+        public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<DeliveryCategory> DeliveryCategories { get; set; }
 
 
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Mio.NhaCuaVui.HappySite.Authentication;
 using Mio.NhaCuaVui.HappySite.ExtensionMethod;
 using Mio.NhaCuaVui.HappySite.Models;
+using Mio.NhaCuaVui.HappySite.Service;
 
 namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
 {
@@ -22,6 +23,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
         {
             _context = context;
         }
+
 
         // GET: HomeAdmin/DonatorOrganizations
         public async Task<IActionResult> Index()
@@ -121,6 +123,8 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             return View(donatorOrganization);
         }
 
+      
+
         // POST: HomeAdmin/Beneficiaries/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -148,28 +152,32 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                     }
 
                     // Update and Insert children
-                    foreach (var childModel in donator.DonationCategoryQuantities)
+                    if(donator.DonationCategoryQuantities != null && donator.DonationCategoryQuantities.Any())
                     {
-                        var existingChild = donatorInDb.DonationCategoryQuantities
-                            .Where(c => c.DonatorOrganizationId == childModel.DonatorOrganizationId && c.CategoryId == childModel.CategoryId)
-                            .SingleOrDefault();
-
-                        if (existingChild != null)
-                            // Update child
-                            _context.Entry(existingChild).CurrentValues.SetValues(childModel);
-                        else
+                        foreach (var childModel in donator.DonationCategoryQuantities)
                         {
-                            // Insert child
-                            var newChild = new DonationCategoryQuantity
+                            var existingChild = donatorInDb.DonationCategoryQuantities
+                                .Where(c => c.DonatorOrganizationId == childModel.DonatorOrganizationId && c.CategoryId == childModel.CategoryId)
+                                .SingleOrDefault();
+
+                            if (existingChild != null)
+                                // Update child
+                                _context.Entry(existingChild).CurrentValues.SetValues(childModel);
+                            else
                             {
-                                CategoryId = childModel.CategoryId,
-                                DonatorOrganizationId = id,
-                                Quantity = childModel.Quantity,
-                                //...
-                            };
-                            donatorInDb.DonationCategoryQuantities.Add(newChild);
+                                // Insert child
+                                var newChild = new DonationCategoryQuantity
+                                {
+                                    CategoryId = childModel.CategoryId,
+                                    DonatorOrganizationId = id,
+                                    Quantity = childModel.Quantity,
+                                    //...
+                                };
+                                donatorInDb.DonationCategoryQuantities.Add(newChild);
+                            }
                         }
                     }
+                    
 
                     var user = HttpContext.Session.GetCurrentAuthentication();
                     donatorInDb.ValidatedUserId = user.UserId;
@@ -206,6 +214,47 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             ViewData["WardId"] = new SelectList(_context.Wards, "WardId", "Name", donator.WardId);
             return View(donator);
         }
+
+
+        public IActionResult AddNewItem(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Needs = _context.Needs.Include(x => x.Categories).ToList();
+
+            var donatorOrganization = _context.DonatorOrganizations
+                .Include(d => d.DonatorOrganizationType)
+                .Include(d => d.Need)
+                .Include(d => d.ValidatedUser)
+                .Include(d => d.Ward)
+                .FirstOrDefaultAsync(m => m.DonatorOrganizationId == id).Result;
+
+
+            if (donatorOrganization == null)
+            {
+                return NotFound();
+            }
+
+            return View(donatorOrganization);
+        }
+        [HttpPost]
+        public IActionResult AddNewItem(DonatorOrganization donator)
+        {
+            if (donator == null || donator.DonationCategoryQuantities == null) return RedirectToAction("Index");
+            var model = donator.DonationCategoryQuantities.Where(x => x.Quantity > 0).ToList();
+            if(model == null || model.Any() == false) return RedirectToAction("Index");
+
+            var donatorService = new DonatorService(_context);
+
+            donatorService.AddNewItem(donator);
+
+            return RedirectToAction("Index");
+        }
+
+      
+
         // GET: HomeAdmin/DonatorOrganizations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

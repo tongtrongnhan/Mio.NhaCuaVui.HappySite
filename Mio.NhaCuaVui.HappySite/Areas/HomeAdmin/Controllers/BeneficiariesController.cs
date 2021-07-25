@@ -145,27 +145,31 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                     }
 
                     // Update and Insert children
-                    foreach (var childModel in beneficiary.BenificaryCategoryQuantities)
+                    if(beneficiary.BenificaryCategoryQuantities != null && beneficiary.BenificaryCategoryQuantities.Any())
                     {
-                        var existingChild = beneficaryInDb.BenificaryCategoryQuantities
-                            .Where(c => c.BenificaryId == childModel.BenificaryId && c.CategoryId == childModel.CategoryId)
-                            .SingleOrDefault();
-
-                        if (existingChild != null)
-                            // Update child
-                            _context.Entry(existingChild).CurrentValues.SetValues(childModel);
-                        else
+                        foreach (var childModel in beneficiary.BenificaryCategoryQuantities)
                         {
-                            // Insert child
-                            var newChild = new BenificaryCategoryQuantity
+                            var existingChild = beneficaryInDb.BenificaryCategoryQuantities
+                                .Where(c => c.BenificaryId == childModel.BenificaryId && c.CategoryId == childModel.CategoryId)
+                                .SingleOrDefault();
+
+                            if (existingChild != null)
+                                // Update child
+                                _context.Entry(existingChild).CurrentValues.SetValues(childModel);
+                            else
                             {
-                                CategoryId = childModel.CategoryId,
-                                BenificaryId = id,
-                                Quantity = childModel.Quantity,
-                                //...
-                            };
-                            beneficaryInDb.BenificaryCategoryQuantities.Add(newChild);
+                                // Insert child
+                                var newChild = new BenificaryCategoryQuantity
+                                {
+                                    CategoryId = childModel.CategoryId,
+                                    BenificaryId = id,
+                                    Quantity = childModel.Quantity,
+                                    //...
+                                };
+                                beneficaryInDb.BenificaryCategoryQuantities.Add(newChild);
+                            }
                         }
+
                     }
 
                     var user = HttpContext.Session.GetCurrentAuthentication();

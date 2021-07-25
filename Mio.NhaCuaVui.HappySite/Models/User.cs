@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +30,22 @@ namespace Mio.NhaCuaVui.HappySite.Models
         [Required]
         public bool IsActive { get; set; }
 
+        public int? MyDonatorOrganizationId { get; set; }
+        [ForeignKey("MyDonatorOrganizationId")]
+
+        public DonatorOrganization MyDonatorOrganization { get; set; }
+
         public ICollection<UserUserRole> UserUserRoles { get; set; }
+
+        public string GetMyOrganizationName()
+        {
+            if(MyDonatorOrganization == null)
+            {
+                return "Chưa xác định";
+            }
+            return MyDonatorOrganization.OrganizationDisplay();
+
+        }
 
     }
 }

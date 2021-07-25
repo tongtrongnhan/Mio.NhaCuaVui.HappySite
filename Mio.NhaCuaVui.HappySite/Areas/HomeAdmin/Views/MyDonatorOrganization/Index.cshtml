@@ -1,0 +1,157 @@
+﻿@model MyDonatorOrganizationViewModel
+@{
+    ViewBag.Title = "Tổ chức của tôi";
+}
+
+@if (Model.HadOrganization == false)
+{
+    <h2>Bạn chưa được gán cho tổ chức nào, vui lòng liên hệ hot line: 0937.002.776</h2>
+}
+else
+{
+    <h2>Chào mừng bạn đến với trang quản lý của tổ chức @Model.Donator.OrganizationDisplay()</h2>
+    <hr />
+    <h2>Danh sách vật phẩm còn lại của bạn</h2>
+    <a href="/HomeAdmin/MyDonatorOrganization/AddNewItem/@Model.Donator.DonatorOrganizationId" class="btn btn-danger">Cập nhật</a>
+    <hr />
+    <section>
+        <div class="col-md-12">
+
+            <div class="table-wrap">
+                <table class="table">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Nhu cầu</th>
+                            <th>Tên hàng hóa</th>
+                            <th>Số lượng</th>
+                            <th>Đơn vị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Donator.DonationCategoryQuantities != null && Model.Donator.DonationCategoryQuantities.Any())
+                        {
+                            foreach (var cate in Model.Donator.DonationCategoryQuantities)
+                            {
+                                <tr>
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td>@cate.Category.Name</td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+
+    <hr />
+    <h2>Danh sách chờ giao hàng</h2>
+    <a href="/HomeAdmin/MyDonatorOrganization/DeliveryManagerCreate/@Model.Donator.DonatorOrganizationId" class="btn btn-success">Thêm mới</a>
+    <hr />
+    @if (Model.PendingForDeliveries != null && Model.PendingForDeliveries.Any())
+    {
+        foreach (var pendingDelivery in Model.PendingForDeliveries)
+        {
+            <section>
+                <div class="col-md-12">
+                    <div class="container">
+                        <h3>Tổ chức nhận: <strong> @pendingDelivery.GetBeneficaryName()</strong></h3>
+                        <p>Địa chỉ: <strong> @pendingDelivery.GetBeneficaryAddress()</strong></p>
+                        <p>Ngày dự kiến: <strong> @pendingDelivery.GetEstimateDeliveryDateText()</strong></p>
+                        <a style="margin-bottom: 20px" href="/HomeAdmin/MyDonatorOrganization/DeliveryAction/@pendingDelivery.DeliveryId" class="btn btn-warning">Bấm vào đây để giao hàng</a>
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="table-warning">
+                                <tr>
+                                    <th>Nhu cầu</th>
+                                    <th>Tên hàng hóa</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn vị</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (pendingDelivery.DeliveryCategories != null && pendingDelivery.DeliveryCategories.Any())
+                                {
+                                    foreach (var cate in pendingDelivery.DeliveryCategories)
+                                    {
+                                        <tr>
+                                            <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                            <td>@cate.Category.Name</td>
+                                            <td>@cate.Quantity</td>
+                                            <td>@cate.Category.Unit</td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        }
+
+    }
+
+
+
+    @if (Model.Deliveries != null && Model.Deliveries.Any())
+    {
+        <hr />
+        <h2>Danh sách đã giao hàng</h2>
+        <hr />
+        foreach (var delivery in Model.Deliveries)
+        {
+            <section>
+                <div class="col-md-12">
+                    <div class="container">
+                        <h3>Tổ chức nhận: <strong> @delivery.GetBeneficaryName()</strong></h3>
+                        <p>Địa chỉ: <strong> @delivery.GetBeneficaryAddress()</strong></p>
+                        <p>Ngày dự kiến: <strong> @delivery.GetEstimateDeliveryDateText()</strong></p>
+                        <p>Ngày giao: <strong> @delivery.GetDeliveriedDateText()</strong></p>
+                        @if (delivery.IsValidated)
+                        {
+                            <p style="color: green">Đã xác nhận bởi: @delivery.ValidatedByUser.Name (@delivery.ValidatedByUser.Phone)</p>
+                        }
+
+
+                    </div>
+                    <div class="table-wrap">
+                        <table class="table">
+                            <thead class="table-danger">
+                                <tr>
+                                    <th>Nhu cầu</th>
+                                    <th>Tên hàng hóa</th>
+                                    <th>Số lượng</th>
+                                    <th>Đơn vị</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (delivery.DeliveryCategories != null && delivery.DeliveryCategories.Any())
+                                {
+                                    foreach (var cate in delivery.DeliveryCategories)
+                                    {
+                                        <tr>
+                                            <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                            <td>@cate.Category.Name</td>
+                                            <td>@cate.Quantity</td>
+                                            <td>@cate.Category.Unit</td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        }
+
+    }
+
+}
