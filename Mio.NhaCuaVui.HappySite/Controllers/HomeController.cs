@@ -79,5 +79,10 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Instruction()
+        {
+            return View();
+        }
     }
 }

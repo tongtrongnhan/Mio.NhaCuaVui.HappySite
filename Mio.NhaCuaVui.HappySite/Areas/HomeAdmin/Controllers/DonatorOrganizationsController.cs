@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,6 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
     public class DonatorOrganizationsController : Controller
     {
         private readonly ZDbContext _context;
-
         public DonatorOrganizationsController(ZDbContext context)
         {
             _context = context;
@@ -32,7 +32,9 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                                 .Include(d => d.DonatorOrganizationType)
                                 .Include(x => x.ValidatedUser)
                                 .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category)
-                                .Include(b => b.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City);
+                                .Include(b => b.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                                            .OrderByDescending(x => x.DonatorOrganizationId);
+            
             ;
             return View(await zDbContext.ToListAsync());
         }
@@ -182,6 +184,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                     var user = HttpContext.Session.GetCurrentAuthentication();
                     donatorInDb.ValidatedUserId = user.UserId;
                     donatorInDb.ValidatedAt = DateTime.Now;
+                    donatorInDb.CreatedAt = DateTime.Now;
 
 
                     if (donatorInDb.IsValidated != donator.IsValidated)

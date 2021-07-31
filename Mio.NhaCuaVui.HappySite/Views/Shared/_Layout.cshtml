@@ -8,9 +8,11 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Gọi Đò Ơi!" />
     <meta property="og:description" content="Chúng tôi là một chuyến đò, kết nối những nhà hảo tâm và người cần giúp đỡ. Toàn bộ thông tin sẽ được công khai trên hệ thống!" />
-    <meta property="og:image" content="https://nhacuavui.com/wp-content/uploads/2020/09/Untitled-1.png" />
+    <meta property="og:image" content="https://goidooi.com/Upload/Photo/Banner2.jpg" />
 
     <title>@ViewData["Title"] - Gọi đò!</title>
+    <link rel="icon" type="image/png" href="~/img/favo.png" />
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" />
@@ -42,6 +44,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
                         </li>
+                        <li class="nav-item" style="margin-bottom: 10px;margin-left: 10px">
+                            <a class="nav-link text-light btn btn-success " asp-area="" asp-controller="Report" asp-action="DeliverySuccess">Báo cáo</a>
+                        </li>
+                        <li class="nav-item" style="margin-left: 10px">
+                            <a class="nav-link  text-light btn btn-warning" asp-area="" asp-controller="Home" asp-action="Instruction">Hướng dẫn sử dụng</a>
+                        </li>
+
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Đăng Nhập</a>
                         </li>
@@ -62,6 +72,7 @@
             </div>
         </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.js"></script>
     <script src="~/js/select2.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

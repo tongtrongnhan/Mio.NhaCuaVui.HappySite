@@ -1,0 +1,16 @@
+﻿@model CategoryIndexViewModel
+
+<input type="hidden" name="BenificaryCategoryQuantities[@Model.Index].CategoryId" value="@Model.Category.CategoryId"/>
+
+<div class="row col-md-12" style="margin: 10px" data-category-id="@Model.Category.CategoryId">
+    <div class="col-4">
+        <label class="control-label">@Model.Category.Name</label>
+    </div>
+    <div class="col-6">
+        <input name="BenificaryCategoryQuantities[@Model.Index].Quantity" class="form-control" type="number" placeholder="số lượng" />
+    </div>
+
+    <div class="col-2">
+        <label class="control-label">@Model.Category.Unit</label>
+    </div>
+</div>

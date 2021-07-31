@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mio.NhaCuaVui.HappySite.Models;
 
 namespace Mio.NhaCuaVui.HappySite.Migrations
 {
     [DbContext(typeof(ZDbContext))]
-    partial class ZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210727220233_ImageForBeneficare")]
+    partial class ImageForBeneficare
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,7 +209,7 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                     b.Property<bool>("IsDelivery")
                         .HasColumnType("bit");
 
-                    b.Property<bool?>("IsValidated")
+                    b.Property<bool>("IsValidated")
                         .HasColumnType("bit");
 
                     b.Property<int>("UserCreateId")

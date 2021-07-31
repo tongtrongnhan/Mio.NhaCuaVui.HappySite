@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Mio.NhaCuaVui.HappySite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,7 @@ namespace Mio.NhaCuaVui.HappySite.Constant
             };
             return new SelectList(threeOption, "Value", "Text", value == null? null : value.ToString());
         }
+
     }
 
     public class SelectValue

@@ -11,9 +11,6 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -88,9 +85,9 @@
                 </td>
 
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.DonatorOrganizationId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.DonatorOrganizationId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.DonatorOrganizationId">Delete</a>
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.DonatorOrganizationId">Edit</a> 
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.DonatorOrganizationId">Delete</a>
+                    <a class="btn btn-success" href="/HomeAdmin/MyDonatorOrganization/Manager/@item.DonatorOrganizationId">Quản lý tổ chức</a>
                 </td>
             </tr>
         }

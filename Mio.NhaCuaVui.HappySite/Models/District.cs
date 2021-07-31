@@ -19,5 +19,15 @@ namespace Mio.NhaCuaVui.HappySite.Models
 
         public List<Ward> Wards { get; set; }
 
+        [NotMapped]
+        public string FullName { 
+            get
+            {
+                if (City == null) return Name;
+
+                return (Name + " - "+ City.Name);
+            }
+        }
+
     }
 }

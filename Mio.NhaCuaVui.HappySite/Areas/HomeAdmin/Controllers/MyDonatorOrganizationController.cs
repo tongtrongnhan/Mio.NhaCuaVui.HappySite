@@ -60,6 +60,39 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             return View(model);
         }
 
+
+        public IActionResult Manager(int id)
+        {
+
+            var model = new MyDonatorOrganizationViewModel();
+
+            model.HadOrganization = true;
+            model.Donator = _context.DonatorOrganizations
+                            .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                            .FirstOrDefault(x => x.DonatorOrganizationId == id);
+
+            model.PendingForDeliveries = _context.Deliveries.Include(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                                                            .Include(x => x.UserCreate)
+                                                            .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                                            .Where(x =>
+                                                                   x.DonatorOrganizationId == id
+                                                                   && x.IsValidated == false
+                                                                   && x.IsDelivery == false).ToList();
+
+            model.Deliveries = _context.Deliveries.Include(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                                                           .Include(x => x.UserCreate)
+                                                           .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                                           .Where(x =>
+                                                                  x.DonatorOrganizationId == id
+                                                                  && x.IsDelivery == true).ToList();
+
+
+            return View(model);
+        }
+
+
+
+
         public IActionResult AddNewItem(int? id)
         {
             if (id == null)
@@ -106,7 +139,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             var userInDb = _context.Users.FirstOrDefault(x => x.UserId == user.UserId);
 
             // check permission
-            if (userInDb == null || userInDb.MyDonatorOrganizationId == null || userInDb.MyDonatorOrganizationId != id)
+            if (userInDb == null || userInDb.MyDonatorOrganizationId == null)
             {
                 return RedirectToAction("Index");
             }
@@ -129,7 +162,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             var userInDb = _context.Users.FirstOrDefault(x => x.UserId == user.UserId);
 
             // check permission
-            if (userInDb == null || userInDb.MyDonatorOrganizationId == null || userInDb.MyDonatorOrganizationId != model.DonatorOrganizationId)
+            if (userInDb == null || userInDb.MyDonatorOrganizationId == null)
             {
                 return RedirectToAction("Index");
             }
@@ -156,6 +189,11 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
 
             _context.Deliveries.Add(delivery);
             _context.SaveChanges();
+
+            if(userInDb.MyDonatorOrganizationId != model.DonatorOrganizationId)
+            {
+                return RedirectToAction("Manager", new { id= model .DonatorOrganizationId});
+            }    
 
             return RedirectToAction("Index");
         }
@@ -203,6 +241,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
 
             delivery.DeliveredAt = DateTime.Now;
             delivery.IsDelivery = true;
+            delivery.IsValidated = null;
             _context.SaveChanges();
 
             return RedirectToAction("Index");

@@ -37,11 +37,19 @@ namespace Mio.NhaCuaVui.HappySite.Models
         public DateTime? DeliveredAt { get; set; }
 
         [DefaultValue(false)]
-        public bool IsValidated { get; set; }
+        public bool? IsValidated { get; set; }
         public DateTime? ValidateddAt { get; set; }
         public int? ValidatedByUserId { get; set; }
         [ForeignKey("ValidatedByUserId")]
         public User ValidatedByUser { get; set; }
+
+        public string GetOrganizationName()
+        {
+            if (DonatorOrganization == null) return "không rõ";
+
+            return DonatorOrganization.OrganizationNameDisplay;
+
+        }
 
         public string GetBeneficaryName()
         {

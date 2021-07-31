@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Delivery>
+
+<h2>Những chuyến đò thành công</h2>
+<hr />
+@foreach (var delivery in Model)
+{
+    <section>
+        <div class="col-md-12">
+            <div class="container">
+                <h3>Nơi chia sẻ: <strong> @delivery.GetOrganizationName()</strong></h3>
+                <h3>Nơi nhận: <strong> @delivery.GetBeneficaryName() - ĐT @delivery.Beneficiary.ContactPhone </strong></h3>
+                <p>Địa chỉ: <strong> @delivery.GetBeneficaryAddress()</strong></p>
+                <p>Ngày dự kiến: <strong> @delivery.GetEstimateDeliveryDateText()</strong></p>
+                <p>Ngày giao: <strong> @delivery.DeliveryDate.Value.ToString("dd/MM/yyyy")</strong></p>
+                <p style="color: forestgreen">Xác nhận bởi: @delivery.ValidatedByUser.Name</p>
+                <br />
+
+            </div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Nhu cầu</th>
+                            <th>Tên hàng hóa</th>
+                            <th>Số lượng</th>
+                            <th>Đơn vị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (delivery.DeliveryCategories != null && delivery.DeliveryCategories.Any())
+                        {
+                            foreach (var cate in delivery.DeliveryCategories)
+                            {
+                                if (cate.Quantity <= 0) continue;
+                                <tr>
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td>@cate.Category.Name</td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <hr />
+    <br />
+    <br />
+    <br />
+    <br />
+}

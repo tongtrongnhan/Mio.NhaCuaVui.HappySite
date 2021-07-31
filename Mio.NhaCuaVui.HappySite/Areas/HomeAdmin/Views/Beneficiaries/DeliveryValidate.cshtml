@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Delivery>
+
+<h2>Danh sách giao hàng cần duyệt</h2>
+<hr />
+@foreach (var delivery in Model)
+{
+    <section>
+        <div class="col-md-12">
+            <div class="container">
+                <h3>Tổ chức cho: <strong> @delivery.GetOrganizationName()</strong></h3>
+                <h3>Tổ chức nhận: <strong> @delivery.GetBeneficaryName() - ĐT @delivery.Beneficiary.ContactPhone </strong></h3>
+                <p>Địa chỉ: <strong> @delivery.GetBeneficaryAddress()</strong></p>
+                <p>Ngày dự kiến: <strong> @delivery.GetEstimateDeliveryDateText()</strong></p>
+                <p>Ngày giao: <strong> @delivery.GetDeliveriedDateText()</strong></p>
+                <div class="container" id="@delivery.DeliveryId">
+                    <button data-id="@delivery.DeliveryId" class="btn btn-success validate">Duyệt</button>
+                    <button data-id="@delivery.DeliveryId" class="btn btn-danger not-validate">Hỏng Duyệt</button>
+                </div>
+                <br />
+
+            </div>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead class="table-danger">
+                        <tr>
+                            <th>Nhu cầu</th>
+                            <th>Tên hàng hóa</th>
+                            <th>Số lượng</th>
+                            <th>Đơn vị</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (delivery.DeliveryCategories != null && delivery.DeliveryCategories.Any())
+                        {
+                            foreach (var cate in delivery.DeliveryCategories)
+                            {
+                                <tr>
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td>@cate.Category.Name</td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <hr />
+    <br />
+    <br />
+    <br />
+    <br />
+}
+
+@section Scripts
+{
+    <script>
+        $("button.validate").click(function () {
+
+            var deliveryId = $(this).attr("data-id");
+
+            $.ajax({
+                url: "/HomeAdmin/Beneficiaries/SuccessValidateDelivery",
+                type: "post",
+                data: {
+                    deliveryId: deliveryId,
+                },
+                success: function (res) {
+                    if (res.isSuccess) {
+                        $("div#" + deliveryId).html("<h4>Đã duyệt</h4>");
+                    } 
+
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra, vui lòng thử lại')
+                }
+            });
+        });
+
+
+        $("button.not-validate").click(function () {
+
+            var deliveryId = $(this).attr("data-id");
+
+            $.ajax({
+                url: "/HomeAdmin/Beneficiaries/     ",
+                type: "post",
+                data: {
+                    deliveryId: deliveryId,
+                },
+                success: function (res) {
+                    if (res.isSuccess) {
+                        $("div#" + deliveryId).hide();
+                    }
+
+                },
+                error: function () {
+                    alert('Có lỗi xảy ra, vui lòng thử lại')
+                }
+            });
+        });
+    </script>
+
+}

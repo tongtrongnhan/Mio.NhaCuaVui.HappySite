@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Mio.NhaCuaVui.HappySite.Models;
 using Mio.NhaCuaVui.HappySite.Models.ViewModels;
+using Mio.NhaCuaVui.HappySite.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,20 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
 
 
             _context.SaveChanges();
+
+            var emailService = new EmailService();
+
+            string bodyformat = @"
+Người đề cử: {0} - Số điện thoại: {1}
+Tổ chức: {2}
+Đường dẫn: https://goidooi.com/HomeAdmin/DonatorOrganizations/Edit/{3}
+
+ 
+";
+            string body = string.Format(bodyformat, donator.ProposetorName, donator.ProposetorPhone, donator.OrganizationName, donator.DonatorOrganizationId);
+
+            emailService.SendEmailAsync("Có người muốn donate, lúc " + DateTime.Now.ToLongTimeString().ToString(), body, "nhan@nhacuavui.com", "ngoc@nhacuavui.com", "nhung@nhacuavui.com", "info@nhacuavui.com");
+
 
             return RedirectToAction("ProposeSuccess");
         }

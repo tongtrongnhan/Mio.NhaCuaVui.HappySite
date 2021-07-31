@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Mio.NhaCuaVui.HappySite</title>
+    <title>@ViewData["Title"] - Admin</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" />
@@ -38,6 +38,14 @@
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="DonatorOrganizations" asp-action="Index">Cần cho</a>
+                            </li>
+                        }
+
+
+                        @if (Context.Session.HadRoles("Admin", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="Beneficiaries" asp-action="DeliveryValidate">Duyệt cho nhận</a>
                             </li>
                         }
                         @if (Context.Session.HadRoles("Donator", "Manager"))

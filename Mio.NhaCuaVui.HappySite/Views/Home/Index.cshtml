@@ -60,13 +60,10 @@
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
-            <img class="d-block w-100" src="https://nhacuavui.com/wp-content/uploads/2020/09/Untitled-1.png" alt="First slide">
+            <img class="d-block w-100" src="~/Upload/Photo/Banner2.jpg" alt="First slide">
         </div>
         <div class="carousel-item">
             <img class="d-block w-100" src="https://nhacuavui.com/wp-content/uploads/2020/09/Untitled-1.png" alt="Second slide">
-        </div>
-        <div class="carousel-item">
-            <img class="d-block w-100" src="https://nhacuavui.com/wp-content/uploads/2020/09/Untitled-1.png" alt="Third slide">
         </div>
     </div>
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -179,17 +176,36 @@
                 <tbody>
                     @if (Model.BenificaryCategories != null && Model.BenificaryCategories.Any())
                     {
+                        int index = 0;
                         foreach (var cate in Model.BenificaryCategories)
                         {
-                            <tr>
-                                <th scope="row" class="scope">@cate.Category.Need.Name</th>
-                                <td>@cate.Category.Name</td>
-                                <td>@cate.Quantity</td>
-                                <td>@cate.Category.Unit</td>
-                            </tr>
+                            if (index < 5)
+                            {
+                                <tr>
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+
+                            }
+                            else
+                            {
+                                <tr data-type="1" style="display: none">
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+
+                            }
+                            index++;
                         }
                     }
 
+                    <tr style="text-align: center">
+                        <td colspan="4"><button data-type="1" class="btn btn-warning view-more">Xem thêm</button></td>
+                    </tr>
 
 
                 </tbody>
@@ -225,15 +241,40 @@
                 <tbody>
                     @if (Model.DonatorCategories != null && Model.DonatorCategories.Any())
                     {
+                        int index = 0;
+
                         foreach (var cate in Model.DonatorCategories)
                         {
-                            <tr>
-                                <th scope="row" class="scope">@cate.Category.Need.Name</th>
-                                <td>@cate.Category.Name</td>
-                                <td>@cate.Quantity</td>
-                                <td>@cate.Category.Unit</td>
-                            </tr>
+
+                            if (index < 5)
+                            {
+                                <tr>
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+
+                            }
+                            else
+                            {
+                                <tr data-type="2" style="display: none">
+                                    <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                                    <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                                    <td>@cate.Quantity</td>
+                                    <td>@cate.Category.Unit</td>
+                                </tr>
+
+                            }
+
+                            index++;
+
                         }
+
+                        <tr style="text-align: center">
+                            <td colspan="4"><button data-type="2" class="btn btn-warning view-more">Xem thêm</button></td>
+                        </tr>
+
                     }
 
                 </tbody>
@@ -241,3 +282,18 @@
         </div>
     </div>
 </section>
+
+@section Scripts
+{
+    <script>
+        $("button.view-more").click(function () {
+            var button = $(this);
+            var dataType = button.attr("data-type");
+            $("tr[data-type='" + dataType + "']").each(function () {
+                $(this).show();
+            });
+
+            button.hide();
+        });
+    </script>
+}
