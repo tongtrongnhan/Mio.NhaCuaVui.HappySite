@@ -329,13 +329,19 @@
 
 <form asp-action="Search" method="POST" data-ajax="true" data-ajax-success="SearchSuccess">
     <div class="input-group">
-        <div class="col-5">
+        <div class="col-4">
+            <label class="form-label" for="form1">Tổ chức</label>
+            <select name="TypeIds" id="select-type" multiple asp-items="ViewBag.Type" class="form-control" style="width: 100%">
+            </select>
+        </div>
+
+        <div class="col-3">
             <label class="form-label" for="form1">Nhu cầu</label>
             <select name="CategoryIds" id="select-category" multiple asp-items="ViewBag.Category" class="form-control" style="width: 100%">
             </select>
         </div>
 
-        <div class="col-5">
+        <div class="col-3">
             <label class="form-label" for="form1">Quận</label>
             <select name="DistrictIds" id="select-district" multiple asp-items="ViewBag.Districts" class="form-control" style="width: 100%"> </select>
         </div>
@@ -357,6 +363,8 @@
     <script>
         $("#select-category").select2();
         $("#select-district").select2();
+        $("#select-type").select2();
+
 
     </script>
 

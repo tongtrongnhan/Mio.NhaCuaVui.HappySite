@@ -40,7 +40,21 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             return PathWithFolderName;
 
         }
-        
+
+        public IActionResult Detail(int id)
+        {
+            var beneficiary = _context.Beneficiaries
+                               .Include(x => x.ValidatedUser)
+                               .Include(x => x.Deliveries).ThenInclude(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                               .Include(x => x.Deliveries).ThenInclude(x => x.DonatorOrganization)
+                               .Include(x => x.BeneficiaryType)
+                               .Include(x => x.BenificaryCategoryQuantities).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                               .Include(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                               .FirstOrDefault(x => x.IsValidated == true && x.BeneficiaryId == id);
+
+            return View(beneficiary);
+        }
+
 
         public IActionResult Index(int? categoryId)
         {
@@ -67,10 +81,14 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             var category = _context.Categories.ToList();
             ViewBag.Category = new SelectList(category, "CategoryId", "Name", categoryId.HasValue?  categoryId.Value : null);
 
+
+            var typeIds = _context.BeneficiaryTypes.ToList();
+            ViewBag.Type = new SelectList(typeIds, "BeneficiaryTypeId", "Name");
+
             return View(model);
         }
 
-        public IActionResult Search(List<int> DistrictIds, List<int> CategoryIds)
+        public IActionResult Search(List<int> DistrictIds, List<int> CategoryIds, List<int> TypeIds)
         {
             var list = _context.Beneficiaries
                    .Include(x => x.ValidatedUser)
@@ -87,6 +105,12 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             if (CategoryIds != null && CategoryIds.Any())
             {
                 list = list.Where(x => x.BenificaryCategoryQuantities.Any(c => CategoryIds.Contains(c.CategoryId))).OrderByDescending(x => x.BeneficiaryId);
+            }
+
+            if(TypeIds != null && TypeIds.Any())
+            {
+                list = list.Where(x => TypeIds.Contains(x.BeneficiaryTypeId)).OrderByDescending(x => x.BeneficiaryId);
+
             }
 
             var html = this.RenderView("_List", list.ToList(), true);
@@ -139,6 +163,9 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             beneficiary.ProposetorEmail = model.ProposetorEmail;
 
             beneficiary.CreatedAt = DateTime.Now;
+
+            beneficiary.Note = model.Note;
+
 
 
             _context.Beneficiaries.Add(beneficiary);

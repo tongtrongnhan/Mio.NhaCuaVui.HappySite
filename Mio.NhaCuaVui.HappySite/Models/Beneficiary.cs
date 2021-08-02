@@ -61,6 +61,11 @@ namespace Mio.NhaCuaVui.HappySite.Models
 
         public List<Delivery> Deliveries { get; set; }
 
+        public List<Delivery> GetSuccessDeliveries()
+        {
+            if (Deliveries == null || Deliveries.Any() == false) return new List<Delivery>();
+            return Deliveries.Where(x => x.IsValidated == true).ToList();
+        }
         public string OrganizationDisplay()
         {
             if (!string.IsNullOrEmpty(OrganizationName)) return OrganizationName;

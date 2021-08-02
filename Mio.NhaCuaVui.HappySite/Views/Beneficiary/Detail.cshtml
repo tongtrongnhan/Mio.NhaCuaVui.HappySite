@@ -1,0 +1,179 @@
+﻿@model Beneficiary
+
+@{
+    ViewData["Title"] = Model.OrganizationDisplay() + " - " + Model.NumberOfPeople + " người";
+    ViewData["Description"] = Model.Note;
+ 
+}
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,500&amp;subset=latin-ext" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link href="~/css/slider.css" rel="stylesheet" />
+
+<h1>@Model.OrganizationDisplay() - @Model.NumberOfPeople người</h1>
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0&appId=246313873527015&autoLogAppEvents=1" nonce="cZcSaAeA"></script>
+<div class="fb-share-button" data-href="https://goidooi.com/Beneficiary/Detail/@(Model.BeneficiaryId)" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgoidooi.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        @if (Model.GetListImage() == null || Model.GetListImage().Any() == false)
+        {
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+
+        }
+        else
+        {
+            for (int i = 0; i < Model.GetListImage().Count; i++)
+            {
+                if (i == 0)
+                {
+        <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="active"></li>
+
+                }
+                else
+                {
+        <li data-target="#carouselExampleIndicators" data-slide-to="@i"></li>
+
+                }
+            }
+        }
+    </ol>
+    <div class="carousel-inner">
+        @if (Model.GetListImage() == null || Model.GetListImage().Any() == false)
+        {
+        <div class="carousel-item active">
+            <img class="d-block w-100" src="~/img/Banner3.JPG" alt="First slide">
+        </div>
+        }
+        else
+        {
+            for (int i = 0; i < Model.GetListImage().Count; i++)
+            {
+                if (i == 0)
+                {
+        <div class="carousel-item active">
+            <img class="d-block w-100" src="@Model.GetListImage()[i]" alt="First slide">
+        </div>
+                }
+                else
+                {
+        <div class="carousel-item">
+            <img class="d-block w-100" src="@Model.GetListImage()[i]" alt="First slide">
+        </div>
+                }
+            }
+        }
+
+
+
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
+<hr />
+
+<section>
+    <div class="section-title text-center">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-2">
+                <h2 class="mt-0 line-height-1">Nhu cầu cần được hỗ trợ:</h2>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12">
+
+        <div class="table-wrap">
+            <table class="table">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Nhu cầu</th>
+                        <th>Tên hàng hóa</th>
+                        <th>Số lượng</th>
+                        <th>Đơn vị</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.BenificaryCategoryQuantities != null && Model.BenificaryCategoryQuantities.Any())
+                    {
+                        foreach (var cate in Model.BenificaryCategoryQuantities)
+                        {
+                    <tr>
+                        <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                        <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                        <td>@cate.Quantity</td>
+                        <td>@cate.Category.Unit</td>
+                    </tr>
+
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@if (Model.GetSuccessDeliveries() != null && Model.GetSuccessDeliveries().Any())
+{
+<hr />
+
+<section>
+    <div class="section-title text-center">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-2">
+                <h2 class="mt-0 line-height-1">Đã được hỗ trợ: </h2>
+            </div>
+        </div>
+
+    </div>
+    @foreach (var delivery in Model.GetSuccessDeliveries())
+        {
+    <h4>Ngày: @delivery.ValidateddAt.Value.ToString("dd/MM/yyyy")</h4>
+    <h4>Tổ chức tặng: @delivery.DonatorOrganization.OrganizationNameDisplay</h4>
+    <div class="col-md-12">
+
+        <div class="table-wrap">
+            <table class="table">
+                <thead class="table-success">
+                    <tr>
+                        <th>Nhu cầu</th>
+                        <th>Tên hàng hóa</th>
+                        <th>Số lượng</th>
+                        <th>Đơn vị</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var cate in delivery.DeliveryCategories)
+                            {
+                    <tr>
+                        <th scope="row" class="scope">@cate.Category.Need.Name</th>
+                        <td><a href="/Beneficiary/Index?categoryId=@cate.Category.CategoryId">@cate.Category.Name</a> </td>
+                        <td>@cate.Quantity</td>
+                        <td>@cate.Category.Unit</td>
+                    </tr>
+
+                            }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+        }
+
+</section>
+}
+
+

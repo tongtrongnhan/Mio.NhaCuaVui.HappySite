@@ -46,11 +46,12 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                                                             .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                                                             .Where(x =>
                                                                    x.DonatorOrganizationId == userInDb.MyDonatorOrganizationId
-                                                                   && x.IsValidated == false
-                                                                   && x.IsDelivery == false).ToList();
+                                                                   && x.IsValidated != true
+                                                                   && x.IsDelivery != true).ToList();
 
             model.Deliveries = _context.Deliveries.Include(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
                                                            .Include(x => x.UserCreate)
+                                                           .Include(x => x.ValidatedByUser)
                                                            .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                                                            .Where(x =>
                                                                   x.DonatorOrganizationId == userInDb.MyDonatorOrganizationId
@@ -76,11 +77,12 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                                                             .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                                                             .Where(x =>
                                                                    x.DonatorOrganizationId == id
-                                                                   && x.IsValidated == false
-                                                                   && x.IsDelivery == false).ToList();
+                                                                   && x.IsValidated != true
+                                                                   && x.IsDelivery != true).ToList();
 
             model.Deliveries = _context.Deliveries.Include(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
                                                            .Include(x => x.UserCreate)
+                                                           .Include(x => x.ValidatedByUser)
                                                            .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                                                            .Where(x =>
                                                                   x.DonatorOrganizationId == id
@@ -203,7 +205,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             var delivery = _context.Deliveries
                                         .Include(x => x.Beneficiary)
                                         .Include(x => x.DeliveryCategories).ThenInclude(x => x.Category)
-                                        .FirstOrDefault(x => x.DeliveryId == id && x.IsDelivery == false && x.IsValidated == false);
+                                        .FirstOrDefault(x => x.DeliveryId == id && x.IsDelivery != true && x.IsValidated == null);
             return View(delivery);
         }
 
@@ -214,7 +216,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             var delivery = _context.Deliveries
                                         .Include(x => x.Beneficiary)
                                         .Include(x => x.DeliveryCategories).ThenInclude(x => x.Category)
-                                        .FirstOrDefault(x => x.DeliveryId == model.DeliveryId && x.IsDelivery == false && x.IsValidated == false);
+                                        .FirstOrDefault(x => x.DeliveryId == model.DeliveryId && x.IsDelivery == false && x.IsValidated != true);
 
             if(delivery.DeliveryCategories != null || delivery.DeliveryCategories.Any())
             {

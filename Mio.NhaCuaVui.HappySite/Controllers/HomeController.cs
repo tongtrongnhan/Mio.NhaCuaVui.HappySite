@@ -48,6 +48,14 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
                                         })
                                         .ToList();
 
+           model.DeliveriesSuccess =  _context.Deliveries
+                                        .Include(x => x.DonatorOrganization)
+                                        .Include(x => x.ValidatedByUser)
+                                        .Include(x => x.Beneficiary).ThenInclude(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                        .Include(x => x.DeliveryCategories).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
+                                        .Where(x => x.IsValidated == true && x.BeneficiaryId != null).OrderByDescending(x => x.DeliveryId).Take(5).ToList();
+
+
 
             return View(model);
         }

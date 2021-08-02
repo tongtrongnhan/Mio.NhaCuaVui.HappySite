@@ -68,6 +68,7 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             donator.WardId = model.WardId == 0? null : model.WardId;
             donator.Street = model.Street;
             donator.ProposetorEmail = model.ProposetorEmail;
+            donator.Note = model.Note;
 
             donator.CreatedAt = DateTime.Now;
 

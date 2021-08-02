@@ -43,6 +43,12 @@ namespace Mio.NhaCuaVui.HappySite.Models
         [ForeignKey("ValidatedByUserId")]
         public User ValidatedByUser { get; set; }
 
+        public string GetDeliveryDate()
+        {
+            if (DeliveryDate == null) return "N/A";
+            return DeliveryDate.Value.ToString("dd/MM/yyyy");
+        }
+
         public string GetOrganizationName()
         {
             if (DonatorOrganization == null) return "không rõ";

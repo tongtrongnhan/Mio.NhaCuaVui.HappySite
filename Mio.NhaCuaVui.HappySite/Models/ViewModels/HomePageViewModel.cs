@@ -10,6 +10,8 @@ namespace Mio.NhaCuaVui.HappySite.Models.ViewModels
         public int NumberOfPeople { get; set; }
         public int NumberOfDonator { get; set; }
 
+        public List<Delivery> DeliveriesSuccess { get; set; }
+
         public List<DonationCategoryQuantity> DonatorCategories { get; set; }
         public List<BenificaryCategoryQuantity> BenificaryCategories { get; set; }
 
