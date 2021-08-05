@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mio.NhaCuaVui.HappySite.Models;
 
 namespace Mio.NhaCuaVui.HappySite.Migrations
 {
     [DbContext(typeof(ZDbContext))]
-    partial class ZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210805095206_Update-ShipperRequest")]
+    partial class UpdateShipperRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

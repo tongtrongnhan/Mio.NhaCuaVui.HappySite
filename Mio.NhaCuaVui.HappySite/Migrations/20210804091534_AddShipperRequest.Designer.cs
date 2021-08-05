@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mio.NhaCuaVui.HappySite.Models;
 
 namespace Mio.NhaCuaVui.HappySite.Migrations
 {
     [DbContext(typeof(ZDbContext))]
-    partial class ZDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210804091534_AddShipperRequest")]
+    partial class AddShipperRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,9 +422,6 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DistrictId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsValidated")
                         .HasColumnType("bit");
 
@@ -440,17 +439,20 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
                     b.Property<string>("ValidateMessage")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ValidatedAt")
+                    b.Property<DateTime>("ValidatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ValidatedUserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("WardId")
+                        .HasColumnType("int");
+
                     b.HasKey("ShipperRequestId");
 
-                    b.HasIndex("DistrictId");
-
                     b.HasIndex("ValidatedUserId");
+
+                    b.HasIndex("WardId");
 
                     b.ToTable("ShipperRequests");
                 });
@@ -720,19 +722,19 @@ namespace Mio.NhaCuaVui.HappySite.Migrations
 
             modelBuilder.Entity("Mio.NhaCuaVui.HappySite.Models.ShipperRequest", b =>
                 {
-                    b.HasOne("Mio.NhaCuaVui.HappySite.Models.District", "District")
-                        .WithMany()
-                        .HasForeignKey("DistrictId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Mio.NhaCuaVui.HappySite.Models.User", "ValidatedUser")
                         .WithMany()
                         .HasForeignKey("ValidatedUserId");
 
-                    b.Navigation("District");
+                    b.HasOne("Mio.NhaCuaVui.HappySite.Models.Ward", "Ward")
+                        .WithMany()
+                        .HasForeignKey("WardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ValidatedUser");
+
+                    b.Navigation("Ward");
                 });
 
             modelBuilder.Entity("Mio.NhaCuaVui.HappySite.Models.User", b =>

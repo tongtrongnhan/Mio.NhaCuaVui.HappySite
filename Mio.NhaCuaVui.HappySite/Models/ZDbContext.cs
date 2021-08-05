@@ -58,8 +58,7 @@ namespace Mio.NhaCuaVui.HappySite.Models
 
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<DeliveryCategory> DeliveryCategories { get; set; }
-
-
+        public DbSet<ShipperRequest> ShipperRequests { get; set; }
 
     }
 }
