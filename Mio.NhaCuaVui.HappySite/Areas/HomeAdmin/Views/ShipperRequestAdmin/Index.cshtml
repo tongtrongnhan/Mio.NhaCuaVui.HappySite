@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Đăng ký giao hàng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model IEnumerable<Mio.NhaCuaVui.HappySite.Models.ViewModels.ShipperRequestViewModel>
+
+
+<h2>Quản lý Đăng ký giao hàng</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Thông tin liên lạc
+            </th>
+            <th>
+                Thời gian
+            </th>
+            <th>
+                Phương tiện
+            </th>
+            <th>
+                Khu vực
+            </th>
+
+            <th>
+                Duyệt
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                <span>@item.ShipperName (@item.ShipperPhone)</span>
+            </td>
+            <td>
+                <p>@item.AvailableDate.ToShortDateString() (@(item.AvailableFromHour):00 - @(item.AvailableToHour):00)</p>
+            </td>
+            <td><p>@item.Transportation</p></td>
+            <td><p>@item.DistrictInfo</p></td>
+            <td>
+                @if (item.IsValidated == null)
+                {
+                    <span class="badge badge-info">Chưa duyệt</span>
+                }
+                else
+                {
+                    if (item.IsValidated == true)
+                    {
+                        <span class="badge badge-success">Đã duyệt</span>
+                        <p>Duyệt bởi: <strong>@item.ValidatedBy.Name</strong></p>
+                        <p>Lúc: @item.ValidatedAt.Value.ToLongDateString()</p>
+                    }
+                    else
+                    {
+                        <span class="badge badge-dark">Hỏng được duyệt</span>
+                        <p>Bởi: <strong>@item.ValidatedBy.Name</strong></p>
+                        <p>Lúc: @item.ValidatedAt.Value.ToLongDateString()</p>
+                        <p>@item.ValidateMessage</p>
+
+                    }
+                }
+            </td>
+            <td>
+                @if (item.IsValidated.HasValue)
+                {
+                    <a class="btn btn-sm btn-info mt-1" asp-action="Validate" asp-route-id="@item.ShipperRequestId">Duyệt lại</a>
+                }
+                else
+                {
+                    <a class="btn btn-sm btn-info mt-1" asp-action="Validate" asp-route-id="@item.ShipperRequestId">Duyệt</a>
+                }
+                <a class="btn btn-sm btn-danger mt-1" asp-action="Delete" asp-route-id="@item.ShipperRequestId">Xóa</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

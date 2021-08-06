@@ -55,6 +55,13 @@
                             </li>
 
                         }
+                        @if (Context.Session.HadRoles("Admin", "Manager"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="HomeAdmin" asp-controller="ShipperRequestAdmin" asp-action="Index">Duyệt đăng ký giao hàng</a>
+                            </li>
+
+                        }
 
 
                     </ul>

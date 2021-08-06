@@ -1,0 +1,43 @@
+﻿@model Mio.NhaCuaVui.HappySite.Models.ViewModels.ShipperRequestViewModel
+
+@{
+    ViewData["Title"] = "Duyệt đăng ký giao hàng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div>
+    <h4>Thông tin đăng ký giao hàng</h4>
+    <hr />
+
+    <div>
+        <p>
+            Thông tin liên lạc: <span>@Model.ShipperName (@Model.ShipperPhone)</span>
+        </p>
+        <p>
+            Thời gian: @Model.AvailableDate.ToShortDateString() (@(Model.AvailableFromHour):00 - @(Model.AvailableToHour):00)
+        </p>
+        <p>Phương tiện: @Model.Transportation</p>
+        <p>Khu vực: @Model.DistrictInfo</p>
+    </div>
+
+    <h4>Duyệt đăng ký</h4>
+    <hr />
+
+    <form asp-action="ValidateConfirm">
+        <input type="hidden" asp-for="ShipperRequestId" />
+        <input type="radio" id="validated" name="IsValidated" checked value="true">
+        <label for="validated">Duyệt</label><br>
+        <input type="radio" id="notValidated" name="IsValidated" value="false">
+        <label for="notValidated">Không duyệt</label>
+        
+        <br />
+        <div>
+            <label>Lý do</label><br>
+            <textarea asp-for="ValidateMessage" class="form-control"></textarea>
+        </div>
+
+        <br />
+        <input type="submit" value="Xác nhận" class="btn btn-info" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

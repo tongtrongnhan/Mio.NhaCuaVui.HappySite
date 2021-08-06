@@ -21,7 +21,7 @@ namespace Mio.NhaCuaVui.HappySite.Models
         public string Transportation { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? ValidatedAt { get; set; }
-        public bool IsValidated { get; set; }
+        public bool? IsValidated { get; set; }
         public int? ValidatedUserId { get; set; }
         [ForeignKey("ValidatedUserId")]
         public User ValidatedUser { get; set; }

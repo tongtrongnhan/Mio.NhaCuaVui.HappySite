@@ -1,0 +1,32 @@
+﻿@model Mio.NhaCuaVui.HappySite.Models.ViewModels.ShipperRequestViewModel
+
+@{
+    ViewData["Title"] = "Duyệt đăng ký giao hàng";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+
+<div>
+    <h4>Thông tin đăng ký giao hàng</h4>
+    <hr />
+    
+    <div>
+        <p>
+            Thông tin liên lạc: <span>@Model.ShipperName (@Model.ShipperPhone)</span>
+        </p>
+        <p>
+            Thời gian: @Model.AvailableDate.ToShortDateString() (@(Model.AvailableFromHour):00 - @(Model.AvailableToHour):00)
+        </p>
+        <p>Phương tiện: @Model.Transportation</p>
+        <p>Khu vực: @Model.DistrictInfo</p>
+    </div>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ShipperRequestId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
