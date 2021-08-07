@@ -176,14 +176,15 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
 
             string bodyformat = @"
 Người đề cử: {0} - Số điện thoại: {1}
-Tổ chức: {2}
+Tổ chức: {2},
+Note: {3}
 Đường dẫn: https://goidooi.com/HomeAdmin/Beneficiaries/Edit/{3}
 
  
 ";
-            string body = string.Format(bodyformat, beneficiary.ProposetorName, beneficiary.ProposetorPhone, beneficiary.OrganizationName, beneficiary.BeneficiaryId);
+            string body = string.Format(bodyformat, beneficiary.ProposetorName, beneficiary.ProposetorPhone, beneficiary.OrganizationName, beneficiary.BeneficiaryId, beneficiary.Note);
 
-            emailService.SendEmailAsync("Yêu cầu hỗ trợ, lúc " + DateTime.Now.ToLongTimeString().ToString(), body, "nhan@nhacuavui.com", "ngoc@nhacuavui.com", "nhung@nhacuavui.com", "info@nhacuavui.com");
+            emailService.SendEmailAsync("Yêu cầu hỗ trợ, lúc " + DateTime.Now.ToLongTimeString().ToString(), body, "nhan@nhacuavui.com", "ngoc@nhacuavui.com", "nhung@nhacuavui.com", "info@nhacuavui.com","huynh.nguyen@nhacuavui.com");
 
             return RedirectToAction("ProposeSuccess");
         }

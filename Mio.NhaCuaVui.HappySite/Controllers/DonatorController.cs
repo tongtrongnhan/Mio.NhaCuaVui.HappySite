@@ -30,13 +30,28 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
         }
 
 
-        public IActionResult Propose()
+        public IActionResult Propose(int? id)
         {
             var model = new DonatorProposeViewModel();
             model.AllDonatorOrganizationType = _context.DonatorOrganizationTypes.ToList();
             model.AllNeed = _context.Needs.Include(x => x.Categories).ToList();
             model.Cities = _context.Cities.Where(x => x.IsActive).ToList();
+
+            if(id != null)
+            {
+                var beneficary = _context.Beneficiaries.Find(id.Value);
+                if(beneficary != null)
+                {
+                    model.Note = "Tôi muốn đóng góp cho tổ chức: " +beneficary.OrganizationDisplayName;
+                }    
+            }    
+
             return View(model);
+        }
+
+        public IActionResult Authority()
+        {
+            return View();
         }
 
         public IActionResult ProposeSuccess()
@@ -84,13 +99,14 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             string bodyformat = @"
 Người đề cử: {0} - Số điện thoại: {1}
 Tổ chức: {2}
+Ghi chú: {3}
 Đường dẫn: https://goidooi.com/HomeAdmin/DonatorOrganizations/Edit/{3}
 
  
 ";
-            string body = string.Format(bodyformat, donator.ProposetorName, donator.ProposetorPhone, donator.OrganizationName, donator.DonatorOrganizationId);
+            string body = string.Format(bodyformat, donator.ProposetorName, donator.ProposetorPhone, donator.OrganizationName, donator.DonatorOrganizationId,donator.Note);
 
-            emailService.SendEmailAsync("Có người muốn donate, lúc " + DateTime.Now.ToLongTimeString().ToString(), body, "nhan@nhacuavui.com", "ngoc@nhacuavui.com", "nhung@nhacuavui.com", "info@nhacuavui.com");
+            emailService.SendEmailAsync("Có người muốn donate, lúc " + DateTime.Now.ToLongTimeString().ToString(), body, "nhan@nhacuavui.com", "ngoc@nhacuavui.com", "nhung@nhacuavui.com", "info@nhacuavui.com", "huynh.nguyen@nhacuavui.com");
 
 
             return RedirectToAction("ProposeSuccess");

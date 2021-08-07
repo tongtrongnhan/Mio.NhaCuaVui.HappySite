@@ -4,92 +4,199 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+<link href="~/css/invoice.css" rel="stylesheet" />
 
-<h1>Index</h1>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<div class="col-12">
+    <div class="input-group">
+        <div class="col-4">
+            <input id="seach-name" class="form-control" placeholder="Nhập tên vào đây để tìm kiếm, bấm enter" />
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Thông tin
-            </th>
-            <th>
-                Nhu cầu
-            </th>
+    </div>
+</div>
 
 
-            <th>
-                Chi tiết
-            </th>
+@foreach (var item in Model)
+{
+    <div class="row" style="margin-bottom: 50px" data-id="@item.DonatorOrganizationId">
+        <div class="col-md-12">
+            <div class="widget-box">
 
-            <th>
-                Ghi chú
-            </th>
+                <div class="widget-body">
+                    <div class="widget-main padding-24">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="">
+                                        <b style="color: green">Thông tin người cho</b>
+                                    </div>
+                                </div>
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <p>Người đề cử: <a href="tel:@item.ProposetorPhone">@item.ProposetorName  - @item.ProposetorPhone</a></p>
-                    <p>Người của tổ chức: <a href="tel:@item.ContactPhone">@item.ContactName  - @item.ContactPhone</a></p>
-                    <p>Địa chỉ: @item.GetAddress()</p>
-                    @if (item.IsValidated == null)
-                    {
-                        <a class="btn btn-outline-dark" href="#">Chưa xác định</a>
-                    }
-                    else
-                    {
-                        if (item.IsValidated == true)
-                        {
-                            <a class="btn btn-success" href="#">Đã duyệt</a>
-                            <p>Duyệt bởi: <strong>@item.ValidatedUser.Name</strong></p>
-                            <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
-                        }
-                        else
-                        {
-                            <a class="btn btn-danger" href="#">Hỏng được duyệt</a>
-                            <p>Bởi: <strong>@item.ValidatedUser.Name</strong></p>
-                            <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
-                            <p>@item.NotValidateMessage</p>
+                                <div>
+                                    <ul class="list-unstyled spaced">
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Đề cử: <a class="name" data-id="@item.DonatorOrganizationId" href="tel:@item.ProposetorPhone">@item.ProposetorName  - @item.ProposetorPhone</a>
+                                        </li>
 
-                        }
-                    }
-                </td>
-                <td>
-                    @foreach (var cate in item.DonationCategoryQuantities)
-                    {
-                        <p><strong>@cate.Category.Name: </strong> @cate.Quantity (@cate.Category.Unit)</p>
-                    }
-                    <a href="/HomeAdmin/DonatorOrganizations/AddNewItem/@item.DonatorOrganizationId" class="btn btn-success">Cộng thêm vật phẩm</a>
-                </td>
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Tổ chức: <a class="name" data-id="@item.DonatorOrganizationId" href="tel:@item.ContactPhone">@item.OrganizationNameDisplay</a>
+                                        </li>
 
 
-                <td>
-                    <p><strong>@item.DonatorOrganizationType.Name</strong></p>
-                    <p>Tên tổ chức: @item.OrganizationName</p>
-                    <a class="btn btn-outline-primary" href="#">@item.GetTranspotationInformation()</a>
-
-                </td>
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Địa chỉ: <strong> @item.GetAddress()</strong>
+                                        </li>
 
 
-                <td>
-                    @Html.DisplayFor(modelItem => item.Note)
-                </td>
+                                    </ul>
+                                </div>
+                            </div><!-- /.col -->
 
-                <td>
-                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.DonatorOrganizationId">Edit</a> 
-                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.DonatorOrganizationId">Delete</a>
-                    <a class="btn btn-success" href="/HomeAdmin/MyDonatorOrganization/Manager/@item.DonatorOrganizationId">Quản lý tổ chức</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="">
+                                        <b style="color: darkred">Thông tin</b>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <ul class="list-unstyled  spaced">
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right green"></i>
+                                            Trạng thái:
+                                            @if (item.IsValidated == null)
+                                            {
+                                                <a class="btn btn-outline-dark" href="#">Chưa xác định</a>
+                                            }
+                                            else
+                                            {
+                                                if (item.IsValidated == true)
+                                                {
+                                                    <a class="btn btn-success" href="#">Đã duyệt</a>
+                                                    <p>Duyệt bởi: <strong>@item.ValidatedUser.Name</strong></p>
+                                                    <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn btn-danger" href="#">Hỏng được duyệt</a>
+                                                    <p>Bởi: <strong>@item.ValidatedUser.Name</strong></p>
+                                                    <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
+                                                    <p>@item.NotValidateMessage</p>
+
+                                                }
+                                            }
+                                        </li>
+
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right green"></i>
+                                            Địa chỉ:  <strong> @item.GetAddress()</strong>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+
+                        <div class="space"></div>
+
+                        <div>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="center">#</th>
+                                        <th>Nhu cầu</th>
+                                        <th class="hidden-xs">Tên hàng hóa</th>
+                                        <th class="hidden-480">Số lượng</th>
+                                        <th>Đơn vị</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @if (item.DonationCategoryQuantities != null && item.DonationCategoryQuantities.Any())
+                                    {
+                                        int index = 1;
+                                        foreach (var cate in item.DonationCategoryQuantities)
+                                        {
+                                            if (cate.Quantity <= 0) continue;
+
+                                            <tr>
+                                                <td class="center">@(index++)</td>
+                                                <td>@cate.Category.Need.Name</td>
+                                                <td>
+                                                    @cate.Category.Name
+                                                </td>
+                                                <td>
+                                                    @cate.Quantity
+                                                </td>
+                                                <td> @cate.Category.Unit </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="hr hr8 hr-double hr-dotted"></div>
+
+                        <div class="row">
+                            <div class="col-md-12 pull-right">
+                                <a href="/HomeAdmin/DonatorOrganizations/AddNewItem/@item.DonatorOrganizationId" class="btn btn-success">Cộng thêm vật phẩm</a>
+                                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.DonatorOrganizationId">Edit</a>
+                                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.DonatorOrganizationId">Delete</a>
+                                <a class="btn btn-success" href="/HomeAdmin/MyDonatorOrganization/Manager/@item.DonatorOrganizationId">Quản lý tổ chức</a>
+                            </div>
+                            <div class=" pull-left">
+                                @if (item.ValidatedUser != null)
+                                {
+                                    <p style="color: forestgreen">Xác nhận bởi: @item.ValidatedUser.Name</p>
+
+                                }
+                            </div>
+                            <div class="col-md-12 pull-left">
+                                <p>@item.Note</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+@section Scripts
+{
+<script>
+
+    $("#seach-name").change(function () {
+        var input = $(this).val();
+        var value = input.toLowerCase();
+        $("a.name").each(function () {
+            var atag = $(this);
+            var nameHTML = atag.html();
+
+            var name = nameHTML.toLowerCase();
+            var id = atag.attr("data-id");
+            if (name.includes(value)) {
+
+                $("div[data-id='" + id + "'").show();
+            } else {
+                $("div[data-id='" + id + "'").hide();
+            }
+        });
+    });
+</script>
+}

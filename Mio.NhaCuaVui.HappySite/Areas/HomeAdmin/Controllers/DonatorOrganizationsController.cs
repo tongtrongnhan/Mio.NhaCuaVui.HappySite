@@ -31,7 +31,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
             var zDbContext = _context.DonatorOrganizations
                                 .Include(d => d.DonatorOrganizationType)
                                 .Include(x => x.ValidatedUser)
-                                .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category)
+                                .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
                                 .Include(b => b.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                                                             .OrderByDescending(x => x.DonatorOrganizationId);
             
