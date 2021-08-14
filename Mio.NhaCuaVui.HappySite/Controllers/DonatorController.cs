@@ -23,8 +23,11 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             var list = _context.DonatorOrganizations
                                 .Include(x => x.ValidatedUser)
                                 .Include(x => x.DonatorOrganizationType)
-                                .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category)
+                                .Include(x => x.DonationCategoryQuantities).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
                                 .Include(x => x.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
+                                .Include(x => x.Deliveries).ThenInclude(x => x.DeliveryCategories).ThenInclude(x => x.Category)
+                                .Include(x => x.Deliveries).ThenInclude(x => x.Beneficiary)
+                                .OrderByDescending(x => x.DonatorOrganizationId)
                                 .Where(x => x.IsValidated == true).ToList();
             return View(list);
         }
@@ -99,7 +102,7 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             string bodyformat = @"
 Người đề cử: {0} - Số điện thoại: {1}
 Tổ chức: {2}
-Ghi chú: {3}
+Ghi chú: {4}
 Đường dẫn: https://goidooi.com/HomeAdmin/DonatorOrganizations/Edit/{3}
 
  

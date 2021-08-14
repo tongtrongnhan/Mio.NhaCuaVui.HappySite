@@ -4,7 +4,14 @@
     ViewData["Title"] = "Đề Cử Tài Trợ";
 }
 
+
+
+<link href="~/css/invoice.css" rel="stylesheet" />
+
+
+
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
 
 <style>
     body {
@@ -326,47 +333,153 @@
 <h2>Danh sách chi tiết những sẻ chia được gửi đến Đò!</h2>
 <a href="/Donator/Propose" class="btn btn-primary">Đóng góp ngay!</a>
 <hr />
-<div class="row">
-    @foreach (var item in Model)
-    {
+
+
+@foreach (var item in Model)
+{
+    <div class="row" style="margin-bottom: 50px" data-id="@item.DonatorOrganizationId">
         <div class="col-md-12">
-            <div class="card card-margin">
-                <div class="card-header no-border">
-                    <h5 class="card-title">@item.DonatorOrganizationType.Name</h5>
-                </div>
-                <div class="card-body pt-0">
-                    <div class="widget-49">
-                        <div class="widget-49-title-wrapper">
-                            <div class="widget-49-date-success">
-                                <span class="widget-49-date-day">@item.CreatedAt.Day</span>
-                                <span class="widget-49-date-month">@item.CreatedAt.Month</span>
-                            </div>
-                            <div class="widget-49-meeting-info">
-                                <h2 class="widget-49-pro-title">@item.OrganizationDisplay()</h2>
-                                <span class="widget-49-meeting-time">Địa chỉ: @item.GetAddress()</span>
-                                <span class="widget-49-meeting-time">xác nhận bởi: @item.ValidatedUser.Name (@item.ValidatedUser.Phone)</span>
-                            </div>
+            <div class="widget-box">
+
+                <div class="widget-body">
+                    <div class="widget-main padding-24">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="">
+                                        <b style="color: green">Thông tin người cho</b>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <ul class="list-unstyled spaced">
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Đề cử: <a class="name" data-id="@item.DonatorOrganizationId" href="tel:@item.ProposetorPhone">@item.ProposetorName  - @item.ProposetorPhone</a>
+                                        </li>
+
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Tổ chức: <a class="name" data-id="@item.DonatorOrganizationId" href="tel:@item.ContactPhone">@item.OrganizationNameDisplay</a>
+                                        </li>
+
+
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right blue"></i>
+                                            Địa chỉ: <strong> @item.GetAddress()</strong>
+                                        </li>
+
+
+                                    </ul>
+                                </div>
+                            </div><!-- /.col -->
+
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="">
+                                        <b style="color: darkred">Thông tin</b>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <ul class="list-unstyled  spaced">
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right green"></i>
+                                            Trạng thái:
+
+                                            <a class="btn btn-success" href="#">Đã duyệt</a>
+                                            <p>Duyệt bởi: <strong>@item.ValidatedUser.Name</strong></p>
+                                            <p>Lúc: @item.ValidatedAt.ToLongDateString()</p>
+
+                                        </li>
+
+                                        <li>
+                                            <i class="ace-icon fa fa-caret-right green"></i>
+                                            Địa chỉ:  <strong> @item.GetAddress()</strong>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div><!-- /.col -->
+                        </div><!-- /.row -->
+
+                        <div class="space"></div>
+
+                        <div>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="center">#</th>
+                                        <th>Nhu cầu</th>
+                                        <th class="hidden-xs">Tên hàng hóa</th>
+                                        <th class="hidden-480">Đang còn</th>
+                                        <th>Đã cho</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @if (item.DonationCategoryQuantities != null && item.DonationCategoryQuantities.Any())
+                                    {
+                                        int index = 1;
+                                        foreach (var cate in item.DonationCategoryQuantities)
+                                        {
+                                            var de = item.GetDeliveryOrganization(cate.CategoryId);
+                                            if (cate.Quantity <= 0 && de == null) continue;
+
+                                            <tr>
+                                                <td class="center">@(index++)</td>
+                                                <td>@cate.Category.Need.Name</td>
+                                                <td>
+                                                    @cate.Category.Name
+                                                </td>
+                                                <td>
+                                                    @cate.Quantity (@cate.Category.Unit)
+                                                </td>
+                                                <td>
+                                                    @if (de != null && de.Any())
+                                                    {
+                                                        <ul>
+                                                            @foreach (var del in de)
+                                                            {
+                                                                <li>@del</li>
+                                                            }
+                                                        </ul>
+
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+
+
+
+                                </tbody>
+                            </table>
                         </div>
-                        <ol class="widget-49-meeting-points">
-                            @if (item.DonationCategoryQuantities != null && item.DonationCategoryQuantities.Any())
-                            {
-                                @foreach (var cate in item.DonationCategoryQuantities)
+
+                        <div class="hr hr8 hr-double hr-dotted"></div>
+
+                        <div class="row">
+                            
+                            <div class=" pull-left">
+                                @if (item.ValidatedUser != null)
                                 {
-                                    <li class="widget-49-meeting-item"><span>@cate.Category.Name <strong>@cate.Quantity</strong> (@cate.Category.Unit)</span></li>
+                                    <p style="color: forestgreen">Xác nhận bởi: @item.ValidatedUser.Name</p>
 
                                 }
-
-                            }
-                        </ol>
-                        <div class="widget-49-meeting-action">
-                            <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v11.0&appId=246313873527015&autoLogAppEvents=1" nonce="cZcSaAeA"></script>
-                            <div class="fb-share-button" data-href="https://goidooi.com" data-layout="button_count" data-size="large"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgoidooi.com%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+                            </div>
+                            <div class="col-md-12 pull-left">
+                                <p>@item.Note</p>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+}
 
 
-    }
-</div>

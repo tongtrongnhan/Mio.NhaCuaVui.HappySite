@@ -54,7 +54,7 @@ namespace Mio.NhaCuaVui.HappySite.Areas.HomeAdmin.Controllers
                             .Include(b => b.BeneficiaryType)
                             .Include(b => b.Need)
                             .Include(x => x.ValidatedUser)
-                            .Include(x => x.BenificaryCategoryQuantities).ThenInclude(x => x.Category)
+                            .Include(x => x.BenificaryCategoryQuantities).ThenInclude(x => x.Category).ThenInclude(x => x.Need)
                             .Include(b => b.Ward).ThenInclude(x => x.District).ThenInclude(x => x.City)
                             .OrderByDescending(x => x.IsValidated.HasValue == null).ThenBy(x => x.IsValidated)
                             .ThenBy(x => x.BeneficiaryId);

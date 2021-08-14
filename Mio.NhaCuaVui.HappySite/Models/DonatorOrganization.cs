@@ -53,6 +53,33 @@ namespace Mio.NhaCuaVui.HappySite.Models
         public User ValidatedUser { get; set; }
         public string NotValidateMessage { get; set; }
 
+        public List<string> GetDeliveryOrganization(int CategoryId)
+        {
+            if (Deliveries == null || Deliveries.Any() == false) return new List<string>();
+
+            var delieveries = Deliveries.Where(x => x.DeliveryCategories.Any(c => c.CategoryId == CategoryId)).ToList();
+
+            if (delieveries == null || delieveries.Any() == false) return new List<string>();
+
+
+
+            var result = new List<string>();
+            foreach (var item in delieveries)
+            {
+                if (item.DeliveryCategories == null || item.DeliveryCategories.Any() == false) continue;
+                var category = item.DeliveryCategories.FirstOrDefault(x => x.CategoryId == CategoryId);
+                if (category == null || category.Quantity == 0) continue;
+
+                string resultformat = "Đã cho: {0} ({3}) - Tổ chức nhận: {1} - Lúc: {2}";
+
+                result.Add(string.Format(resultformat, category.Quantity.ToString(), item.Beneficiary.OrganizationDisplay(), item.CreatedAt.ToString("dd/MM/yyyy"), category.Category.Unit));
+
+            }
+
+            return result;
+
+        }
+
 
         public string OrganizationDisplay()
         {
@@ -84,6 +111,8 @@ namespace Mio.NhaCuaVui.HappySite.Models
 
             return "Không thể đi nhận hàng";
         }
+
+        public List<Delivery> Deliveries { get; set; }
 
 
         public List<DonationCategoryQuantity> DonationCategoryQuantities { get; set; }

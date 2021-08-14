@@ -177,7 +177,7 @@ namespace Mio.NhaCuaVui.HappySite.Controllers
             string bodyformat = @"
 Người đề cử: {0} - Số điện thoại: {1}
 Tổ chức: {2},
-Note: {3}
+Note: {4}
 Đường dẫn: https://goidooi.com/HomeAdmin/Beneficiaries/Edit/{3}
 
  
